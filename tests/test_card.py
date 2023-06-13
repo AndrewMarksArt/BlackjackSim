@@ -38,8 +38,6 @@ class TestCard(unittest.TestCase):
         self.assertEqual(seven_of_spades.count_value, 0, "Black 7 card does not have the correct count value.")
         print("7 of spades card count value test passed.")
 
-        print("all tests passed")
-
 
 if __name__ == '__main__':
     unittest.main()

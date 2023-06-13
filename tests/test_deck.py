@@ -13,8 +13,6 @@ class TestDeck(unittest.TestCase):
         self.assertEqual(len(new_deck.cards), 52, "New deck does not have 52 cards.")
         print("New deck card count test passed.")
 
-        print("all tests passed")
-
 
 if __name__ == '__main__':
     unittest.main()
