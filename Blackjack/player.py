@@ -16,14 +16,39 @@ class Player:
 
     def play_turn(self, dealer_hand):
         # Check Dealer up card value
-        dealer_up_value = 0
-        if dealer_hand[0].value.isnumeric():
-            dealer_up_value += int(dealer_hand[0].value)
-        elif dealer_hand[0].value in ['J', 'Q', 'K']:
-            dealer_up_value += 10
-        elif dealer_hand[0].value == 'A':
-            dealer_up_value += 11
+        dealer_up_value = self.get_card_value(dealer_hand[0])
 
+        # if dealer's face up card is an 'A' offer insurance
+        self.offer_insurance(dealer_up_value)
+
+        # Check if the player has a Blackjack
+        if self.has_blackjack(self.hand):
+            print("Player has Blackjack!")
+            return 'blackjack'
+
+        # Check if the player should surrender
+        if self.should_surrender(self.hand, dealer_up_value):
+            print("Player surrenders.")
+            return 'surrender'
+
+        # Check if the player has a pair and should split
+        if self.should_split(self.hand, dealer_up_value):
+            print("Player splits.")
+        else:
+            print("Player does not split.")
+        
+
+
+    def get_card_value(self, card):
+        if card.value.isnumeric():
+            return int(card.value)
+        elif card.value in ['J', 'Q', 'K']:
+            return 10
+        elif card.value == 'A':
+            return 11
+
+
+    def offer_insurance(self, dealer_up_value):
         # Check if Dealer up card is an Ace
         if dealer_up_value == 11:
             print("Dealer offers players insurance.")
@@ -31,33 +56,22 @@ class Player:
                 print("player takes insurance.")
             else:
                 print("player refused insurance.")
-        else:
-            print("Dealer doesn't have an Ace showing.")
 
-        # Check if the player has a Blackjack
-        if len(self.hand.cards) == 2 and self.hand.calculate_value() == 21:
-            print("Player has Blackjack!")
-            return 'blackjack'
-        else:
-            print("Player doesn't have Blackjack.")
 
-        # Check if the player should surrender
-        player_hand_value = self.hand.calculate_value()
-        if player_hand_value in Basic_Strategy.SURRENDER_LOOKUP:
-            if Basic_Strategy.SURRENDER_LOOKUP[player_hand_value][dealer_up_value]:
-                print("Player surrenders.")
-                return 'surrender'
-            else:
-                print("Player doesn't surrender.")
+    def has_blackjack(self, hand):
+        return len(hand.cards) == 2 and hand.calculate_value() == 21
 
-        # Check if the player has a pair and should split
-        if len(self.hand.cards) == 2 and self.hand.cards[0].value == self.hand.cards[1].value:
-            print(f"player has a pair of {self.hand.cards[0].value}")
-            if player_hand_value in Basic_Strategy.SPLIT_LOOKUP:
-                if Basic_Strategy.SPLIT_LOOKUP[player_hand_value][dealer_up_value]:
-                    print("Player splits their pair.")
-                else:
-                    print("Player does not split their pair.")
+
+    def should_surrender(self, hand, dealer_up_value):
+        hand_value = hand.calculate_value()
+        return hand_value in Basic_Strategy.SURRENDER_LOOKUP and Basic_Strategy.SURRENDER_LOOKUP[hand_value][dealer_up_value]
+
+    
+    def should_split(self, hand, dealer_up_value):
+        if len(hand.cards) == 2 and hand.cards[0].value == hand.cards[1].value:
+            hand_value = hand.calculate_value()
+            return hand_value in Basic_Strategy.SPLIT_LOOKUP and Basic_Strategy.SPLIT_LOOKUP[hand_value][dealer_up_value]
+        return False
 
 
     def win(self, amount):
