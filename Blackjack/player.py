@@ -14,9 +14,18 @@ class Player:
     def bet(self):
         return self.betting_unit
 
-    def play_turn(self, dealer_up_card):
+    def play_turn(self, dealer_hand):
+        # Check Dealer up card value
+        dealer_up_value = 0
+        if dealer_hand[0].value.isnumeric():
+            dealer_up_value += int(dealer_hand[0].value)
+        elif dealer_hand[0].value in ['J', 'Q', 'K']:
+            dealer_up_value += 10
+        elif dealer_hand[0].value == 'A':
+            dealer_up_value += 11
+
         # Check if Dealer up card is an Ace
-        if dealer_up_card.value == 'A':
+        if dealer_up_value == 11:
             print("Dealer offers players insurance.")
             if Basic_Strategy.TAKE_INSURANCE:
                 print("player takes insurance.")
@@ -32,8 +41,14 @@ class Player:
         else:
             print("Player doesn't have Blackjack.")
 
-        
-
+        # Check if the player should surrender
+        player_hand_value = self.hand.calculate_value()
+        if player_hand_value in Basic_Strategy.SURRENDER_LOOKUP:
+            if Basic_Strategy.SURRENDER_LOOKUP[player_hand_value][dealer_up_value]:
+                print("Player surrenders.")
+                return 'surrender'
+            else:
+                print("Player doesn't surrender.")
 
     def win(self, amount):
         self.bankroll += amount

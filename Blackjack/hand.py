@@ -23,6 +23,7 @@ class Hand:
             aces -= 1
         
         return value
+
     
     def is_soft(self):
          # Check if the hand is soft (contains an Ace counted as 11)
