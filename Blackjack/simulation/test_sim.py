@@ -30,6 +30,9 @@ print(f"Player's bankroll after bet: {player.bankroll}")
 # Deal the initial cards
 game.deal_cards()
 
+player.hand.cards[0].value = '4'
+player.hand.cards[1].value = '4'
+
 # Display the hands
 print(f"Player's hand: {player.hand.cards[0]}, {player.hand.cards[1]}  (Value: {player.hand.calculate_value()})")
 print(f"Dealer's hand: {dealer.hand.cards[0]}, {dealer.hand.cards[1]} (Value: {dealer.hand.calculate_value()})")

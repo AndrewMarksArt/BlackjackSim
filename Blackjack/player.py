@@ -50,6 +50,16 @@ class Player:
             else:
                 print("Player doesn't surrender.")
 
+        # Check if the player has a pair and should split
+        if len(self.hand.cards) == 2 and self.hand.cards[0].value == self.hand.cards[1].value:
+            print(f"player has a pair of {self.hand.cards[0].value}")
+            if player_hand_value in Basic_Strategy.SPLIT_LOOKUP:
+                if Basic_Strategy.SPLIT_LOOKUP[player_hand_value][dealer_up_value]:
+                    print("Player splits their pair.")
+                else:
+                    print("Player does not split their pair.")
+
+
     def win(self, amount):
         self.bankroll += amount
 

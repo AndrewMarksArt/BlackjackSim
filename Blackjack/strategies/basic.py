@@ -14,17 +14,18 @@ class Basic_Strategy():
 
     # Split lookup table
     SPLIT_LOOKUP = {
-        11: defaultdict(lambda: True),  # Always split aces
-        10: defaultdict(lambda: False),  # Never split tens
-        9: defaultdict(lambda: True, {7: False, 10: False, 11: False}),  # Split 9's against dealer 2-9, except 7
-        8: defaultdict(lambda: True),  # Always split 8's
-        7: defaultdict(lambda: False, {2: True, 3: True, 4: True, 5: True, 6: True, 7: True}),  # Split 7's against dealer 2-7
-        6: defaultdict(lambda: False, {2: True, 3: True, 4: True, 5: True, 6: True}),  # Split 6's against dealer 2-6
+        # we calculate hand value by adding the value of both cards and adjusting for 'A's
+        12: defaultdict(lambda: True),  # Always split aces, a pair of A's will total 11+1 for 12
+        20: defaultdict(lambda: False),  # Never split tens
+        18: defaultdict(lambda: True, {7: False, 10: False, 11: False}),  # Split 9's against dealer 2-9, except 7
+        16: defaultdict(lambda: True),  # Always split 8's
+        14: defaultdict(lambda: False, {2: True, 3: True, 4: True, 5: True, 6: True, 7: True}),  # Split 7's against dealer 2-7
+        12: defaultdict(lambda: False, {2: True, 3: True, 4: True, 5: True, 6: True}),  # Split 6's against dealer 2-6
         # Split 4's against dealer 5 and 6
-        4: defaultdict(lambda: False, {5: True, 6: True}),
+        8: defaultdict(lambda: False, {5: True, 6: True}),
         # Split 3's and 2's against dealer 2-7
-        3: defaultdict(lambda: False, {2: True, 3: True, 4: True, 5: True, 6: True, 7: True}),
-        2: defaultdict(lambda: False, {2: True, 3: True, 4: True, 5: True, 6: True, 7: True}),
+        6: defaultdict(lambda: False, {2: True, 3: True, 4: True, 5: True, 6: True, 7: True}),
+        4: defaultdict(lambda: False, {2: True, 3: True, 4: True, 5: True, 6: True, 7: True}),
     }
 
     # Hard totals strategy
