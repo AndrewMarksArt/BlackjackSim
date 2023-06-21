@@ -3,6 +3,9 @@ from collections import defaultdict
 
 class Basic_Strategy():
 
+    # Take insurance logic
+    TAKE_INSURANCE = False
+
     # Surrender lookup table
     SURRENDER_LOOKUP = {
         16: defaultdict(lambda: False, {9: True, 10: True, 11: True}),
