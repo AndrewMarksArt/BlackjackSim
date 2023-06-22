@@ -38,5 +38,6 @@ print(f"Player's hand: {player.hand.cards[0]}, {player.hand.cards[1]}  (Value: {
 print(f"Dealer's hand: {dealer.hand.cards[0]}, {dealer.hand.cards[1]} (Value: {dealer.hand.calculate_value()})")
 
 # Start player play_hand()
-player.play_turn(dealer.hand.cards)
+dealer.hand.cards[0].value = '6'
+player.play_turn(dealer.hand.cards, game.deck)
 

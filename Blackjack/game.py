@@ -33,3 +33,13 @@ class BlackjackGame:
     def check_for_winner(self):
         # Logic for checking the winner
         pass
+
+
+    @property
+    def deck(self):
+        return self._deck
+
+    @deck.setter
+    def deck(self, deck):
+        self._deck = deck
+    
