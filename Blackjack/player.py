@@ -17,11 +17,16 @@ class Player:
         return self.betting_unit
 
     def play_turn(self, dealer_hand, deck):
-        # Check Dealer up card value
+        # Get dealer card values
         dealer_up_value = self.get_card_value(dealer_hand[0])
+        dealer_total = dealer_up_value + self.get_card_value(dealer_hand[1])
 
         # if dealer's face up card is an 'A' offer insurance
         self.offer_insurance(dealer_up_value)
+
+        if dealer_total == 21:
+            print("Dealer has Blackjack")
+            return 'dealer blackjack'
 
         # Check if the player has a Blackjack
         if self.has_blackjack(self.hand):
@@ -79,10 +84,9 @@ class Player:
                 print(next_move)
                 if next_move == 'hit':
                     self.hit(deck)
-                    print(f"Player's hand: {self.hand.cards[0]}, {self.hand.cards[1]}, {self.hand.cards[2]} ({self.hand.calculate_value()})")
                 elif next_move == 'double':
                     self.hit(deck)
-                    print(f"Player's hand: {self.hand.cards[0]}, {self.hand.cards[1]}, {self.hand.cards[2]} ({self.hand.calculate_value()})")
+                    break
                     # player hand done, calculate final hand value and move to dealers turn
                     #
                     #
@@ -96,6 +100,13 @@ class Player:
             
             if self.hand.calculate_value() > 21:
                 print("Player is Bust.")
+                for i in range(len(self.hand.cards)):
+                        print(f"{self.hand.cards[i]}")
+                print(f"Players total:({self.hand.calculate_value()}) vs Dealers up card {dealer_up_value}")
+            elif self.hand.calculate_value() == 21:
+                print("Player has 21 and stands.")
+                for i in range(len(self.hand.cards)):
+                        print(f"{self.hand.cards[i]}")
                 print(f"Players total:({self.hand.calculate_value()}) vs Dealers up card {dealer_up_value}")
 
     def get_card_value(self, card):
@@ -124,6 +135,7 @@ class Player:
                 print("player refused insurance.")
 
 
+
     def has_blackjack(self, hand):
         """
         check if the player has blackjack.
@@ -136,8 +148,11 @@ class Player:
         check if the player should surrender based on players hand value and dealers face up card value and
         action in loopup table.
         """
-        hand_value = hand.calculate_value()
-        return hand_value in Basic_Strategy.SURRENDER_LOOKUP and Basic_Strategy.SURRENDER_LOOKUP[hand_value][dealer_up_value]
+        if hand.is_soft():
+            pass
+        else:
+            hand_value = hand.calculate_value()
+            return hand_value in Basic_Strategy.SURRENDER_LOOKUP and Basic_Strategy.SURRENDER_LOOKUP[hand_value][dealer_up_value]
 
     
     def should_split(self, hand, dealer_up_value):
@@ -154,7 +169,7 @@ class Player:
         Use lookup table to see what the players next action should be
         """
         hand_value = hand.calculate_value()
-        if hand.is_soft():
+        if hand.is_soft() and len(hand.cards) == 2:
             print("Player's hand is soft, using the soft totals lookup table.")
             return hand_value in Basic_Strategy.SOFT_TOTALS_LOOKUP and Basic_Strategy.SOFT_TOTALS_LOOKUP[hand_value][dealer_up_card]
         else:
