@@ -42,7 +42,7 @@ class Player:
             hand1.add_card(deck.deal())
             print(f"Player hand 1: {hand1.cards[0]}, {hand1.cards[1]}")
 
-            # ADD logic to finish playing hand
+            # Next action for hand 1
             #
             #
 
@@ -73,17 +73,30 @@ class Player:
     
         else:
             print("Player does not split.")
-            next_move = self.next_action(self.hand, dealer_up_value)
-            print(next_move)
-            if next_move == 'hit':
-                self.hand.add_card(deck.deal())
-                print(f"Player's hand: {self.hand.cards[0]}, {self.hand.cards[1]}, {self.hand.cards[2]} ({self.hand.calculate_value()})")
-            elif next_move == 'double':
-                self.hand.add_card(deck.deal())
-                print(f"Player's hand: {self.hand.cards[0]}, {self.hand.cards[1]}, {self.hand.cards[2]} ({self.hand.calculate_value()})")
-            else:
-                print(f"Player's hand: {self.hand.cards[0]}, {self.hand.cards[1]} ({self.hand.calculate_value()})")
-        
+
+            while self.hand.calculate_value() < 21:
+                next_move = self.next_action(self.hand, dealer_up_value)
+                print(next_move)
+                if next_move == 'hit':
+                    self.hit(deck)
+                    print(f"Player's hand: {self.hand.cards[0]}, {self.hand.cards[1]}, {self.hand.cards[2]} ({self.hand.calculate_value()})")
+                elif next_move == 'double':
+                    self.hit(deck)
+                    print(f"Player's hand: {self.hand.cards[0]}, {self.hand.cards[1]}, {self.hand.cards[2]} ({self.hand.calculate_value()})")
+                    # player hand done, calculate final hand value and move to dealers turn
+                    #
+                    #
+
+                else:
+                    print("Players Final Hand")
+                    for i in range(len(self.hand.cards)):
+                        print(f"{self.hand.cards[i]}")
+                    print(f"Players total:({self.hand.calculate_value()}) vs Dealers up card {dealer_up_value}")
+                    break
+            
+            if self.hand.calculate_value() > 21:
+                print("Player is Bust.")
+                print(f"Players total:({self.hand.calculate_value()}) vs Dealers up card {dealer_up_value}")
 
     def get_card_value(self, card):
         """
@@ -146,6 +159,13 @@ class Player:
             return hand_value in Basic_Strategy.SOFT_TOTALS_LOOKUP and Basic_Strategy.SOFT_TOTALS_LOOKUP[hand_value][dealer_up_card]
         else:
             return hand_value in Basic_Strategy.HARD_TOTALS_LOOKUP and Basic_Strategy.HARD_TOTALS_LOOKUP[hand_value][dealer_up_card]
+
+
+    def hit(self, deck):
+        """
+        If action is 'hit', deal 1 card from the deck to the hand
+        """
+        self.hand.add_card(deck.deal())
 
 
     def split_hand(self, hand):

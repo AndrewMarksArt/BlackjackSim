@@ -43,7 +43,10 @@ class Basic_Strategy():
         11: defaultdict(lambda: "double"),
         10: defaultdict(lambda: "hit", {2: "double", 3: "double", 4: "double", 5: "double", 6: "double", 7: "double", 8: "double", 9: "double"}),
         9: defaultdict(lambda: "hit", {3: "double", 4: "double", 5: "double", 6: "double"}),
-        8: defaultdict(lambda: "hit")
+        8: defaultdict(lambda: "hit"),
+        7: defaultdict(lambda: "hit"),
+        6: defaultdict(lambda: "hit"),
+        5: defaultdict(lambda: "hit"),
     }
 
     # Soft totals strategy
