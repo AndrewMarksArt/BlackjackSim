@@ -73,8 +73,17 @@ class Player:
     
         else:
             print("Player does not split.")
+            next_move = self.next_action(self.hand, dealer_up_value)
+            print(next_move)
+            if next_move == 'hit':
+                self.hand.add_card(deck.deal())
+                print(f"Player's hand: {self.hand.cards[0]}, {self.hand.cards[1]}, {self.hand.cards[2]} ({self.hand.calculate_value()})")
+            elif next_move == 'double':
+                self.hand.add_card(deck.deal())
+                print(f"Player's hand: {self.hand.cards[0]}, {self.hand.cards[1]}, {self.hand.cards[2]} ({self.hand.calculate_value()})")
+            else:
+                print(f"Player's hand: {self.hand.cards[0]}, {self.hand.cards[1]} ({self.hand.calculate_value()})")
         
-
 
     def get_card_value(self, card):
         """
@@ -131,7 +140,12 @@ class Player:
         """
         Use lookup table to see what the players next action should be
         """
-        pass
+        hand_value = hand.calculate_value()
+        if hand.is_soft():
+            print("Player's hand is soft, using the soft totals lookup table.")
+            return hand_value in Basic_Strategy.SOFT_TOTALS_LOOKUP and Basic_Strategy.SOFT_TOTALS_LOOKUP[hand_value][dealer_up_card]
+        else:
+            return hand_value in Basic_Strategy.HARD_TOTALS_LOOKUP and Basic_Strategy.HARD_TOTALS_LOOKUP[hand_value][dealer_up_card]
 
 
     def split_hand(self, hand):
