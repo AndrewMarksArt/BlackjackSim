@@ -26,17 +26,17 @@ class Player:
 
         if dealer_total == 21:
             print("Dealer has Blackjack")
-            return 'dealer blackjack'
+            return 'dealer blackjack', self.hand.calculate_value()
 
         # Check if the player has a Blackjack
         if self.has_blackjack(self.hand):
             print("Player has Blackjack!")
-            return 'blackjack'
+            return 'blackjack', self.hand.calculate_value()
 
         # Check if the player should surrender
         if self.should_surrender(self.hand, dealer_up_value):
             print("Player surrenders.")
-            return 'surrender'
+            return 'surrender', self.hand.calculate_value()
 
         # Check if the player has a pair and should split
         if self.should_split(self.hand, dealer_up_value):
@@ -86,7 +86,7 @@ class Player:
                     self.hit(deck)
                 elif next_move == 'double':
                     self.hit(deck)
-                    break
+                    return 'double', self.hand.calculate_value()
                     # player hand done, calculate final hand value and move to dealers turn
                     #
                     #
@@ -96,18 +96,21 @@ class Player:
                     for i in range(len(self.hand.cards)):
                         print(f"{self.hand.cards[i]}")
                     print(f"Players total:({self.hand.calculate_value()}) vs Dealers up card {dealer_up_value}")
-                    break
+                    return 'stand', self.hand.calculate_value()
             
             if self.hand.calculate_value() > 21:
                 print("Player is Bust.")
                 for i in range(len(self.hand.cards)):
                         print(f"{self.hand.cards[i]}")
                 print(f"Players total:({self.hand.calculate_value()}) vs Dealers up card {dealer_up_value}")
+                return 'bust', self.hand.calculate_value()
+
             elif self.hand.calculate_value() == 21:
                 print("Player has 21 and stands.")
                 for i in range(len(self.hand.cards)):
                         print(f"{self.hand.cards[i]}")
                 print(f"Players total:({self.hand.calculate_value()}) vs Dealers up card {dealer_up_value}")
+                return 'stand', self.hand.calculate_value()
 
     def get_card_value(self, card):
         """
